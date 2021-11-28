@@ -16,6 +16,8 @@ Rest assured best practices
 
 -Циклы
 
+-Сериализацию
+
 -Pojo классы
 
 -Stream api
