@@ -6,5 +6,12 @@ Rest assured best practices
  
 
 
-Тест 1
+Тест 1: проверить что у всех пользователей верный
+паттерн email: "first_name" + "." + "last_name" + "@reqres.in" .
+В тесте используем:
+-Циклы
+-Pojo классы
+-Stream api
+-Cервис для генерации POJO: https://json2csharp.com/json-to-pojo 
+
 
