@@ -35,7 +35,7 @@ Rest assured best practices
 
 
 ## Тест 3:
-проверить что у всех пользователя George Edwardsх верный
+проверить что ухпользователя George Edwardsх верный
 
 паттерн email: "first_name" + "." + "last_name" + "@reqres.in" 
 
