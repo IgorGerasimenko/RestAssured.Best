@@ -12,9 +12,13 @@ Rest assured best practices
 
 -Сериализацию
 
+-Десериализацию
+
 -Pojo классы
 
 -Stream api
+
+-Groovy
 
 -Счетчик запусков
 
