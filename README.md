@@ -22,19 +22,22 @@ Rest assured best practices
 
  
 
-## Тест 1: проверить что у всех пользователей на странице №2 верный
+## Тест 1:
+проверить что у всех пользователей на странице №2 верный
 
-## паттерн email: "first_name" + "." + "last_name" + "@reqres.in" 
-
-
-## Тест 2: проверить что у всех пользователей на ВСЕХ страницах верный
-
-## паттерн email: "first_name" + "." + "last_name" + "@reqres.in" 
+паттерн email: "first_name" + "." + "last_name" + "@reqres.in" 
 
 
-## Тест 3: проверить что у всех пользователя George Edwardsх верный
+## Тест 2:
+проверить что у всех пользователей на ВСЕХ страницах верный
 
-## паттерн email: "first_name" + "." + "last_name" + "@reqres.in" 
+паттерн email: "first_name" + "." + "last_name" + "@reqres.in" 
+
+
+## Тест 3:
+проверить что у всех пользователя George Edwardsх верный
+
+паттерн email: "first_name" + "." + "last_name" + "@reqres.in" 
 
 
 
