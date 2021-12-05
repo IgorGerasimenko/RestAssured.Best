@@ -1,23 +1,16 @@
 package apiTests;
 
 import apiTests.pojoClasses.User;
-import apiTests.pojoClasses.UserRoot;
+import utils.Counter;
 import io.restassured.http.ContentType;
-import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ReqresApi {
@@ -55,8 +48,11 @@ public class ReqresApi {
     }
 
 
+
     @Test
-    public void checkEmailPatternForAllUsersOnThisPage(){
+    public void checkEmailPatternForAllUsersOnThisPage() throws IOException {
+        Counter counter = new Counter("fdsfsd");
+        counter.writeIncrement();
         List<User> users = given()
                         .contentType(ContentType.JSON)
                         .when()
@@ -64,11 +60,12 @@ public class ReqresApi {
                         .then()
                         .log().all()
                         .extract().body().jsonPath().getList("data",User.class);
+        assertNotNull(users.stream().findFirst().get().getFirst_name());
         assertTrue(users.stream().allMatch(x->x.getEmail().startsWith(x.getFirst_name().toLowerCase() + "." + x.getLast_name().toLowerCase())));
     }
 
     @Test
-    public void checkEmailPatternForAllUsersOnAllPage(){
+    public void checkEmailPatternForAllUsersOnAllPages(){
 
         for(int i =1; i<=pageCount; i++){
             List<User> users = given()
@@ -78,13 +75,14 @@ public class ReqresApi {
                     .then()
                     .log().all()
                     .extract().body().jsonPath().getList("data",User.class);
+            assertNotNull(users.stream().findFirst().get().getFirst_name());
             assertTrue(users.stream().allMatch(x->x.getEmail().startsWith(x.getFirst_name().toLowerCase() + "." + x.getLast_name().toLowerCase())));
         }
 
-        }
+    }
 
     @Test
-    public void checkEmailPatternForGeorgeEdwards(){
+    public void checkEmailPatternForGeorgeEdwards() throws IOException {
 
         for(int i =0; i<pageCount; i++){
 
@@ -96,13 +94,13 @@ public class ReqresApi {
 
                 } else {
                     System.out.println("Пользователь найден, проверяю его email");
+                    assertNotNull(user.getLast_name(), user.getFirst_name());
                     assertEquals(user.getEmail(), user.getFirst_name().toLowerCase() + "." + user.getLast_name().toLowerCase() + "@reqres.in");
                     return;
                 }
             }
             Assertions.fail("что-то пошло не так, скорее всего пользователь не был найден");
         }
-
 
     }
 
