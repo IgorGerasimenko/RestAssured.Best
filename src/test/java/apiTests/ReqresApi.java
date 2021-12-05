@@ -1,14 +1,15 @@
 package apiTests;
 
+import apiTests.pojoClasses.CreatorUser;
+import apiTests.pojoClasses.SuccessCreateUser;
 import apiTests.pojoClasses.User;
+import org.junit.jupiter.api.DisplayName;
 import utils.Counter;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.util.List;
-
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,8 +49,8 @@ public class ReqresApi {
     }
 
 
-
     @Test
+    @DisplayName("Тест 1: проверка, что у всех пользователей на странице №2 верный паттерн email: `first_name` + `.` + `last_name` + `@reqres.in`")
     public void checkEmailPatternForAllUsersOnThisPage() throws IOException {
         Counter counter = new Counter("fdsfsd");
         counter.writeIncrement();
@@ -59,12 +60,14 @@ public class ReqresApi {
                         .get(URL+"api/users?page=2")
                         .then()
                         .log().all()
+                        .statusCode(200)
                         .extract().body().jsonPath().getList("data",User.class);
         assertNotNull(users.stream().findFirst().get().getFirst_name());
         assertTrue(users.stream().allMatch(x->x.getEmail().startsWith(x.getFirst_name().toLowerCase() + "." + x.getLast_name().toLowerCase())));
     }
 
     @Test
+    @DisplayName("Тест 2: проверка, что у всех пользователей на всех страницах верный паттерн email: `first_name` + `.` + `last_name` + `@reqres.in`")
     public void checkEmailPatternForAllUsersOnAllPages(){
 
         for(int i =1; i<=pageCount; i++){
@@ -74,6 +77,7 @@ public class ReqresApi {
                     .get(URL+"api/users?page="+i)
                     .then()
                     .log().all()
+                    .statusCode(200)
                     .extract().body().jsonPath().getList("data",User.class);
             assertNotNull(users.stream().findFirst().get().getFirst_name());
             assertTrue(users.stream().allMatch(x->x.getEmail().startsWith(x.getFirst_name().toLowerCase() + "." + x.getLast_name().toLowerCase())));
@@ -82,6 +86,7 @@ public class ReqresApi {
     }
 
     @Test
+    @DisplayName("Тест 3: проверка, что у пользователя George Edwards верный паттерн email: `first_name` + `.` + `last_name` + `@reqres.in`")
     public void checkEmailPatternForGeorgeEdwards() throws IOException {
 
         for(int i =0; i<pageCount; i++){
@@ -101,8 +106,37 @@ public class ReqresApi {
             }
             Assertions.fail("что-то пошло не так, скорее всего пользователь не был найден");
         }
-
     }
+
+        @Test
+        @DisplayName("Тест 4: проверка, что можно создать нового пользователя")
+        public void createNewUser() throws IOException {
+            Counter counter = new Counter("Test 4");
+            counter.writeIncrement();
+
+            int userNumber = counter.readCounterValue();
+
+            CreatorUser user = new CreatorUser("user"+userNumber, "QA");
+
+            SuccessCreateUser successCreate = given()
+                    .contentType(ContentType.JSON)
+                    .body(user)
+                    .when()
+                    .post(URL+"api/users")
+                    .then()
+                    .log().all()
+                    .statusCode(201)
+                    .extract().as(SuccessCreateUser.class);
+            assertNotNull(successCreate.getId());
+            assertEquals("user"+userNumber, successCreate.getName());
+            assertEquals("QA", successCreate.getJob());
+        }
+
+
+
+
+
+
 
 
 
